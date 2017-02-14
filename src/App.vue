@@ -45,7 +45,7 @@
     border-bottom-width: 2px;
     border-bottom-style: solid;
     border-bottom-color: #DDDDDD;
-    background-color: #000000;
+    background-color: #00b4ff;
   }
   
   .logo {
