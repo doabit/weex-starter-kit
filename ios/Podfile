@@ -6,6 +6,7 @@ def common
     pod 'WeexSDK', '0.9.5.3'
     pod 'SDWebImage', '3.7.5'
     pod 'SocketRocket', '0.4.2'
+    pod 'WXDevtool', '0.9.5', :configurations => ['Debug']
 end
 
 target 'WeexStarterKit' do

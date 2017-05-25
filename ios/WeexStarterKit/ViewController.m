@@ -37,6 +37,7 @@
     if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
         statusBar.backgroundColor = [UIColor colorWithRed:0.00 green:0.71 blue:1.00 alpha:1.0];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationRefreshInstance:) name:@"RefreshInstance" object:nil];
 
     [self render];
 }
@@ -44,6 +45,8 @@
 - (void)dealloc
 {
     [_instance destroyInstance];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
 }
 
 - (void)render
@@ -71,9 +74,18 @@
     _instance.updateFinish = ^(UIView *view) {
         NSLog(@"update Finish");
     };
-    NSString *url = [NSString stringWithFormat:@"file://%@/index.js",[NSBundle mainBundle].bundlePath];
 
-    [_instance renderWithURL:[NSURL URLWithString:url] options:@{@"bundleUrl":url} data:nil];
+    // NSString *url = [NSString stringWithFormat:@"file://%@/index.js",[NSBundle mainBundle].bundlePath];
+
+    // [_instance renderWithURL:[NSURL URLWithString:url] options:@{@"bundleUrl":url} data:nil];
+    if (!self.url) {
+        WXLogError(@"error: render url is nil");
+        return;
+    }
+    NSURL *URL = [self getURL: [self.url absoluteString]];
+    NSString *randomURL = [NSString stringWithFormat:@"%@%@random=%d",URL.absoluteString,URL.query?@"&":@"?",arc4random()];
+    [_instance renderWithURL:[NSURL URLWithString:randomURL] options:@{@"bundleUrl":URL.absoluteString} data:nil];
+
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
@@ -83,5 +95,39 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - refresh
+- (void)refreshWeex
+{
+    [self render];
+}
+
+#pragma mark - load local device bundle
+- (NSURL*)getURL:(NSString*)url
+{
+    NSRange range = [url rangeOfString:@"_wx_tpl"];
+    if (range.location != NSNotFound) {
+        NSString *tmp = [url substringFromIndex:range.location];
+        NSUInteger start = [tmp rangeOfString:@"="].location;
+        NSUInteger end = [tmp rangeOfString:@"&"].location;
+        ++start;
+        if (end == NSNotFound) {
+            end = [tmp length] - start;
+        }
+        else {
+            end = end - start;
+        }
+        NSRange subRange;
+        subRange.location = start;
+        subRange.length = end;
+        url = [tmp substringWithRange:subRange];
+    }
+    return [NSURL URLWithString:url];
+}
+
+#pragma mark - notification
+- (void)notificationRefreshInstance:(NSNotification *)notification {
+    [self refreshWeex];
 }
 @end

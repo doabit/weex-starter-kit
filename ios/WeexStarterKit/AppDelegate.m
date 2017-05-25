@@ -13,6 +13,9 @@
 
 #import <WeexSDK/WeexSDK.h>
 
+#import <TBWXDevtool/WXDevtool.h>
+
+
 @interface AppDelegate ()
 
 @end
@@ -26,6 +29,9 @@
     [WXAppConfiguration setAppGroup:@"Weex"];
     [WXAppConfiguration setAppName:@"WeexStarterKit"];
     [WXAppConfiguration setAppVersion:@"0.0.1"];
+    
+    [WXDevTool launchDevToolDebugWithUrl:@"ws://192.168.1.102:8088/debugProxy/native"];
+
 
     //init SDK environment
     [WXSDKEngine initSDKEnvironment];

@@ -13,7 +13,7 @@
     "dev": "webpack --watch",
     "serve": "node build/init.js && serve -p 8080",
     "copy:ios": "cp dist/app.weex.js ios/assets/index.js",
-    "debug": "weex-devtool"
+    "debug": "weex debug"
   },
   "dependencies": {
     "axios": "^0.15.3",
