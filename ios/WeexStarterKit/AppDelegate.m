@@ -13,7 +13,7 @@
 
 #import <WeexSDK/WeexSDK.h>
 
-#import <TBWXDevtool/WXDevtool.h>
+#import <TBWXDevTool/WXDevTool.h>
 
 
 @interface AppDelegate ()
@@ -29,8 +29,8 @@
     [WXAppConfiguration setAppGroup:@"Weex"];
     [WXAppConfiguration setAppName:@"WeexStarterKit"];
     [WXAppConfiguration setAppVersion:@"0.0.1"];
-    
-    [WXDevTool launchDevToolDebugWithUrl:@"ws://192.168.1.102:8088/debugProxy/native"];
+//    NSString *devUrl = [[NSString alloc] initWithFormat:@"ws://%@:8088/debugProxy/native", DEMO_HOST];
+    [WXDevTool launchDevToolDebugWithUrl: DEBUG_URL];
 
 
     //init SDK environment
@@ -40,7 +40,7 @@
     [WXLog setLogLevel:WXLogLevelLog];
 
 //     [WXSDKEngine registerModule:@"event" withClass:NSClassFromString(@"WXEventModule")];
-     [WXSDKEngine registerHandler:[WXImgLoaderDefaultImpl new] withProtocol:@protocol(WXImgLoaderProtocol)];
+    [WXSDKEngine registerHandler:[WXImgLoaderDefaultImpl new] withProtocol:@protocol(WXImgLoaderProtocol)];
 
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
